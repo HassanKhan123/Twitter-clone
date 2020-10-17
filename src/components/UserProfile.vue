@@ -6,19 +6,7 @@
         <div class="user-profile__follower-count">
             <strong>Followers: </strong>{{ followers }}
         </div>
-        <form class="user-profile__create-tweet" @submit.prevent="createNewTweet">
-            <label for="new-tweet"><strong>New Tweet</strong> </label>
-            <textarea id="new -tweet" rows="4" v-model="newTweetContent" />
-            <div class="user-profile__create-tweet-type">
-                <label for="new-tweet-type"><strong>Type</strong> </label>
-                <select id="new-tweet-type" v-model="selectedTweetType">
-                    <option :value="option.value" v-for="(option, index) in tweetTypes" :key="index">
-                        {{ option.name }}
-                    </option>
-                </select>
-            </div>
-            <button>Tweet!</button>
-        </form>
+        <CreateTweetPanel @add-tweet="addTweet" />
     </div>
 
     <div class="user-profile__tweets-wrapper">
@@ -31,24 +19,15 @@
 
 <script>
 import TweetItem from "./TweetItem";
+import CreateTweetPanel from "./CreateTweetPanel";
 export default {
     name: "UserProfile",
     components: {
         TweetItem,
+        CreateTweetPanel,
     },
     data() {
         return {
-            newTweetContent: "",
-            selectedTweetType: "instant",
-            tweetTypes: [{
-                    value: "draft",
-                    name: "Draft",
-                },
-                {
-                    value: "instant",
-                    name: "Instant Tweet",
-                },
-            ],
             followers: 0,
             user: {
                 id: 1,
@@ -88,14 +67,11 @@ export default {
         toggleFavourite(id) {
             console.log(`Favourited tweet #${id}`);
         },
-        createNewTweet() {
-            if (this.newTweetContent && this.selectedTweetType !== "draft") {
-                this.user.tweets.unshift({
-                    id: this.user.tweets.length + 1,
-                    content: this.newTweetContent,
-                });
-                this.newTweetContent = ""
-            }
+        addTweet(content) {
+            this.user.tweets.unshift({
+                id: this.user.tweets.length + 1,
+                content,
+            });
         },
     },
     mounted() {
@@ -104,52 +80,63 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .user-profile {
     display: grid;
     grid-template-columns: 1fr 3fr;
     width: 90%;
     padding: 50px 5%;
-}
 
-.user-profile__user-panel {
-    display: flex;
-    flex-direction: column;
-    margin-right: 50px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 5px;
-    border: 1px solid #dfe3e8;
-}
+    .user-profile__user-panel {
+        display: flex;
+        flex-direction: column;
+        margin-right: 50px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 5px;
+        border: 1px solid #dfe3e8;
 
-.user-profile__admin-badge {
-    background-color: purple;
-    color: white;
-    border-radius: 5px;
-    margin-right: auto;
-    padding: 0 10px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
+        h1 {
+            margin: 10px;
+        }
 
-.user-profile__follower-count {
-    margin-top: 5px;
-    margin-bottom: 10px;
-}
+        .user-profile__admin-badge {
+            background-color: purple;
+            color: white;
+            border-radius: 5px;
+            margin-right: auto;
+            padding: 0 10px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
 
-h1 {
-    margin: 10px;
-}
+        .user-profile__follower-count {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
 
-.user-profile__tweets-wrapper {
-    display: grid;
-    grid-gap: 10px;
-}
+        .user-profile__create-tweet {
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid #dfe3e8;
+            padding-top: 10px;
 
-.user-profile__create-tweet {
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid #dfe3e8;
-    padding-top: 10px;
+            &.--exceeded {
+                color: red;
+                // border: 1px solid red;
+
+                button {
+                    background-color: red;
+                    border: none;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .user-profile__tweets-wrapper {
+        display: grid;
+        grid-gap: 10px;
+    }
 }
 </style>
