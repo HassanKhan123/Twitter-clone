@@ -1,7 +1,7 @@
 <template>
 <div class="user-profile">
     <div class="user-profile__user-panel">
-        <h1 class="user-profile__user-name">@{{ state.user.userName }}</h1>
+        <h1 class="user-profile__user-name">@{{ state.user.username }}</h1>
         <div class="user-profile__admin-badge" v-if="state.user.isAdmin">Admin</div>
         <div class="user-profile__follower-count">
             <strong>Followers: </strong>{{ state.followers }}
@@ -11,7 +11,7 @@
 
     <div class="user-profile__tweets-wrapper">
         <div class="user-profile__tweets">
-            <TweetItem v-for="tweet in state.user.tweets" :key="tweet.id" :userName="state.user.userName" :tweet="tweet" />
+            <TweetItem v-for="tweet in state.user.tweets" :key="tweet.id" :username="state.user.username" :tweet="tweet" />
         </div>
     </div>
 </div>
@@ -19,11 +19,19 @@
 
 <script>
 import {
-    reactive
+    reactive,
+    computed
 } from 'vue'
+import {
+    useRoute
+} from 'vue-router'
 
-import TweetItem from "./TweetItem";
-import CreateTweetPanel from "./CreateTweetPanel";
+import TweetItem from "../components/TweetItem";
+import CreateTweetPanel from "../components/CreateTweetPanel";
+import {
+    users
+} from '../assets/users'
+
 export default {
     name: "UserProfile",
     components: {
@@ -31,26 +39,13 @@ export default {
         CreateTweetPanel,
     },
     setup() {
+        const route = useRoute();
+        const userId = computed(() => route.params.userId)
         const state = reactive({
             followers: 0,
-            user: {
-                id: 1,
-                userName: "_HassanKhan123",
-                firstName: "Hassan",
-                lastName: "Khan",
-                email: "hassan@gmail.com",
-                isAdmin: true,
-                tweets: [{
-                        id: 1,
-                        content: "Twitter is amazing",
-                    },
-                    {
-                        id: 2,
-                        content: "Learning Vue",
-                    },
-                ],
-            },
+            user: users[userId.value - 1] || users[0]
         })
+        console.log(users[userId.value - 1] || users[0])
 
         function addTweet(content) {
             state.user.tweets.unshift({
@@ -61,16 +56,11 @@ export default {
 
         return {
             state,
-            addTweet
+            addTweet,
+            userId
         }
     },
-    watch: {
-        followers(newFollowers, oldFollowers) {
-            if (oldFollowers < newFollowers) {
-                console.log(`${this.user.userName} has gained followers`);
-            }
-        },
-    },
+
 };
 </script>
 

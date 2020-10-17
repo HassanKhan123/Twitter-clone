@@ -2,44 +2,37 @@
 <div id="app">
     <div id="app">
         <nav>
-
-            <div class="navigation__logo">
-                Twotter
-            </div>
+            <router-link to="/">
+                <div class="navigation__logo">Twotter</div>
+            </router-link>
             <div class="navigation__user">
                 {{ state.user.username }}
             </div>
-
         </nav>
-
+        <router-view />
     </div>
-    <UserProfile />
 </div>
 </template>
 
 <script>
 import {
     reactive
-} from 'vue'
+} from "vue";
 
-import UserProfile from '@/components/UserProfile'
 export default {
     name: "App",
-    components: {
-        UserProfile
-    },
+
     setup() {
         const state = reactive({
             user: {
-                username: '_HassanKhan123'
-            }
-        })
+                username: "_HassanKhan123",
+            },
+        });
 
         return {
-            state
-        }
-    }
-
+            state,
+        };
+    },
 };
 </script>
 
@@ -50,7 +43,7 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
     // min-height: 100vh;
-    background-color: #F3F5FA;
+    background-color: #f3f5fa;
 
     nav {
         display: flex;

@@ -1,7 +1,7 @@
 <template>
 <div class="tweet-item">
     <div class="user-profile__tweet">
-        <div class="tweet-item__user">@{{ userName }}</div>
+        <div class="tweet-item__user">@{{ username }}</div>
         <div class="tweet-item__content">
             {{ tweet.content }}
         </div>
@@ -13,7 +13,7 @@
 export default {
     name: "TweetItem",
     props: {
-        userName: {
+        username: {
             type: String,
             required: true,
         },
