@@ -1,5 +1,5 @@
 <template>
-<div class="tweet-item" @click="favouriteTweet(tweet.id)">
+<div class="tweet-item">
     <div class="user-profile__tweet">
         <div class="tweet-item__user">@{{ userName }}</div>
         <div class="tweet-item__content">
@@ -22,10 +22,13 @@ export default {
             required: true,
         },
     },
-    methods: {
-        favouriteTweet(id) {
-            this.$emit("favourite", id);
-        },
+    setup(props, ctx) {
+        function favouriteTweet(id) {
+            ctx.emit("favourite", id);
+        }
+        return {
+            favouriteTweet
+        };
     },
 };
 </script>
